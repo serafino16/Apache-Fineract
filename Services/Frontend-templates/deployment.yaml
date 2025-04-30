@@ -1,0 +1,45 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  labels:
+    app: {{ .name }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      serviceAccountName: {{ .saName }}
+      containers:
+        - name: {{ .name }}
+          image: {{ .image }}
+          ports:
+            - containerPort: {{ .port }}
+          resources:
+            requests:
+              cpu: {{ .cpuRequest }}
+              memory: {{ .memoryRequest }}
+            limits:
+              cpu: {{ .cpuLimit }}
+              memory: {{ .memoryLimit }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: {{ .port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+

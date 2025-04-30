@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: "stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=600"
+    external-dns.alpha.kubernetes.io/hostname: {{ .hostname }}
+spec:
+  selector:
+    app: {{ .name }}
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .port }}

@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: postgres
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      serviceAccountName: postgres-sa
+      containers:
+        - name: postgres
+          image: {{ .Values.image }}
+          env:
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresDb }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresUser }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.postgresPassword }}
+          ports:
+            - containerPort: 5432
+          resources:
+            requests:
+              cpu: {{ .Values.cpuRequest }}
+              memory: {{ .Values.memoryRequest }}
+            limits:
+              cpu: {{ .Values.cpuLimit }}
+              memory: {{ .Values.memoryLimit }}
+          livenessProbe:
+            exec:
+              command:
+                - "pg_isready"
+                - "-U"
+                - "{{ .Values.postgresUser }}"
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - "pg_isready"
+                - "-U"
+                - "{{ .Values.postgresUser }}"
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+      volumeClaimTemplates:
+        - metadata:
+            name: postgres-storage
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 20Gi
+---

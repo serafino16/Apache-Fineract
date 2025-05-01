@@ -1,3 +1,7 @@
+variable "aws_provider" {
+  description = "AWS provider configuration"
+  type        = any  # This can be any object type, depending on the provider structure
+}
 variable "alb_name" {
   description = "Name of the ALB"
   type        = string

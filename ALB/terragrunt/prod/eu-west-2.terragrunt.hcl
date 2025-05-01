@@ -7,15 +7,15 @@ terraform {
 }
 
 inputs = {
-  alb_name                           = "prod-alb-eu-west-1"
+  alb_name                           = "prod-alb-eu-west-2"
   alb_internal                       = false
-  alb_security_groups                = ["sg-12345678"]
-  alb_subnets                        = ["subnet-aaaa", "subnet-bbbb"]
+  alb_security_groups                = ["sg-0f1a2b3c4d5e6f7a8", "sg-1a2b3c4d5e6f7a8b9"]
+  alb_subnets                        = ["subnet-01a2b3c4d5e6f7a8b", "subnet-02b3c4d5e6f7a8c9d"]
   alb_enable_deletion_protection    = true
   target_group_name                  = "prod-target-group"
   target_group_port                  = 80
   target_group_protocol              = "HTTP"
-  vpc_id                             = "vpc-abcdef12"
+  vpc_id                             = "vpc-0a1b2c3d4e5f6789a"
   health_check_protocol              = "HTTP"
   health_check_port                  = "80"
   health_check_interval              = 30

@@ -1,3 +1,6 @@
+provider "aws" {
+  region = var.aws_provider["region"]
+}
 resource "aws_lb" "this" {
   provider           = aws.prod
   name               = var.alb_name

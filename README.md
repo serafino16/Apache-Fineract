@@ -7,7 +7,7 @@ Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod mav
 Kubernetes services : you can check the folder services ,every file is combined to have deployment,service and service account. Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database and redis. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database contains headless service and also verticaland horizontal load balancers and secrets.
 
 For CI/CD is used jenkins.
-
+Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereign ity)
 EKS: it has 3 clusters dev/stage shared,prod and prodbackup(possible extension for France and Germany). In regions EU-WEST-1 EU-WEST-2 EU-WEST-3.In the cluster are used public and private node groups,cluster autoscaler and ecr.
 
 VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.The three vpcs are connected with transit gateway.

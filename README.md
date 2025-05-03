@@ -28,9 +28,9 @@ Enable route propagation in each TGW’s route table for peering attachments
 
 EKS_IRSA:Config for iam for service account with oidc token and necessary policies and permissions.
 
-Ingress controller to work with ALB for the services with Http and NLB for RDS and Redis.
+Pan European Multi-Region Load Balancing with Route 53, ALB, and NLB
 
-Route53 works like global load balancer with failover routing connected to alb and nlb.
+Strategy uses  Route 53, ALB, and NLB for high availability, geo-based routing, and failover across multiple AWS regions. Route 53 is configured with geolocation routing to direct users to the nearest region and failover routing to switch to a backup region during outages. Each region uses an Application Load Balancer (ALB) for frontend service load balancing and as an Ingress Controller for backend APIs via Kubernetes (e.g., EKS), supporting host-based routing. For the data layer, a Network Load Balancer (NLB) handles TCP traffic to Amazon RDS and Amazon ElastiCache (Redis), ensuring high-throughput and zonal redundancy. This architecture ensures low latency, regional compliance, resilient failover, and secure separation between application and database layers.
 
 Storage: for filesystem is used efs with replications in diffrent regions and datasync between backend services and for RDS and Redis is used block storage on provisioned iops.Storageclss is enabled on both for dyanmic provisioning,csi add-on plugins and pvcs.
 

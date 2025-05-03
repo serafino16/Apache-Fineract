@@ -4,13 +4,23 @@ Apache Fineract is an open-source platform for core banking and financial servic
 
 Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod maven:3.9.4-openjdk-17 AS prod-builder to openjdk:17-slim defined in multi stage build.For fronted image-node:18 with images for dev/stage and for prod cleaned for unecessary dependencies.Standart images for PostgreSQL and Redis.
 
-Kubernetes services : you can check the folder services ,every file is combined to have deployment,service and service account. Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database and redis. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database contains headless service and also verticaland horizontal load balancers and secrets.
+
+Kubernetes services : you can check the folder services ,every file have templates for deployment,service and service account and load balancers and values for them. Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database and redis. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database contains headless service and also verticaland horizontal load balancers and secrets.
+
 
 For CI/CD is used jenkins.
 Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereign ity)
-EKS: it has 3 clusters dev/stage shared,prod and prodbackup(possible extension for France and Germany). In regions EU-WEST-1 EU-WEST-2 EU-WEST-3.In the cluster are used public and private node groups,cluster autoscaler and ecr.
 
-VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.The three vpcs are connected with transit gateway.
+EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
+
+VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.
+
+Transit Gateway strategy:Inter-Region Peering
+Mesh Peering Topology: Each TGW will be peered with every other TGW for full regional mesh.
+
+Use TGW Peering Attachments for each region pair.
+
+Enable route propagation in each TGW’s route table for peering attachments
 
 EKS_IRSA:Config for iam for service account with oidc token and necessary policies and permissions.
 

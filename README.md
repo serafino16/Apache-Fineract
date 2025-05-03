@@ -16,6 +16,7 @@ EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are use
 VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.
 
 Transit Gateway strategy:Inter-Region Peering
+
 Mesh Peering Topology: Each TGW will be peered with every other TGW for full regional mesh.
 
 Use TGW Peering Attachments for each region pair.

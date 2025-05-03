@@ -9,11 +9,14 @@ Kubernetes services : you can check the folder services ,every file have templat
 
 
 For CI/CD is used jenkins.
+
 Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereign ity)
 
 EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
 
 VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.
+
+The solution integrates AWS Cloud WAN to enable centralized hybrid connectivity across multiple AWS regions and on-premises data centers. Calico CNI with VXLAN overlay networking is used within Kubernetes clusters for secure pod-to-pod communication. Cloud WAN segments and routing policies ensure seamless, secure traffic flow between environments
 
 Transit Gateway strategy:Inter-Region Peering
 

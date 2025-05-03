@@ -2,9 +2,9 @@
 
 Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.PostgreSQL for RDS and Redis for cache.
 
-Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod maven:3.9.4-openjdk-17 AS prod-builder to eclipse-temurin:17-jdk-alpine defined in multi stage build.For fronted image-node:18 with images for dev/stage and for prod cleaned for unecessary dependencies.Standart images for PostgreSQL and Redis.
+Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod maven:3.9.4-openjdk-17 AS prod-builder to openjdk:17-slim defined in multi stage build.For fronted image-node:18 with images for dev/stage and for prod cleaned for unecessary dependencies.Standart images for PostgreSQL and Redis.
 
-Kubernetes services : you can check the folder services ,every file is combined to have deployment,service and service account. Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database and redis. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB and NLB. Database contains headless service and also verticaland horizontal load balancers and secrets.
+Kubernetes services : you can check the folder services ,every file is combined to have deployment,service and service account. Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database and redis. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database contains headless service and also verticaland horizontal load balancers and secrets.
 
 For CI/CD is used jenkins.
 

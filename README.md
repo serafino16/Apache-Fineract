@@ -1,4 +1,4 @@
-# Apache-Fineract
+no# Apache-Fineract
 
 Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.PostgreSQL for RDS and Redis for cache.
 
@@ -16,7 +16,7 @@ EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are use
 
 VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.
 
-The solution integrates AWS Cloud WAN to enable centralized hybrid connectivity across multiple AWS regions and on-premises data centers. Calico CNI with VXLAN overlay networking is used within Kubernetes clusters for secure pod-to-pod communication. Cloud WAN segments and routing policies ensure seamless, secure traffic flow between environments
+The networking  solution also integrates AWS Cloud WAN to enable centralized hybrid connectivity across multiple AWS regions and on-premises data centers. Calico CNI with VXLAN overlay networking is used within Kubernetes clusters for secure pod-to-pod communication. Cloud WAN segments and routing policies ensure seamless, secure traffic flow between environments
 
 Transit Gateway strategy:Inter-Region Peering
 

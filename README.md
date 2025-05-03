@@ -36,4 +36,7 @@ Storage: for filesystem is used efs with replications in diffrent regions and da
 
 Event driven system with SQS and Lambda for Loan managment and Client Data Managment.
 
+Geo-Partitioned Disaster Recovery Strategy
+The disaster recovery strategy for Amazon RDS and Redis ensures high availability and fault tolerance across multiple AWS regions. The primary region is eu-west-1 (Ireland), with disaster recovery extending to eu-west-2 (London), eu-west-3 (Paris), and eu-central-1 (Frankfurt). RDS utilizes cross-region read replicas for asynchronous data replication from the primary region to secondary regions. In the event of primary region failure, a read replica can be promoted to a standalone instance with DNS updates or manual promotion.Redis uses Global Datastore for Redis for asynchronous replication between the primary and secondary regions, allowing for failover by DNS redirection or application reconfiguration. The RTO (Recovery Time Objective) is set to under 15 minutes, and the RPO (Recovery Point Objective) is under 5 minutes. All data is encrypted in transit and at rest, and backup snapshots are stored in cross-region S3 buckets.
+
 WAF: firewall rules for every VPC and SQL injection protection for RDS.

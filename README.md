@@ -10,7 +10,7 @@ Kubernetes services : you can check the folder services ,every file have templat
 
 For CI/CD is used jenkins.
 
-Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereign ity)
+Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereignity)
 
 EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
 
@@ -30,7 +30,7 @@ EKS_IRSA:Config for iam for service account with oidc token and necessary polici
 
 Pan European Multi-Region Global Load Balancing using Route 53 with ALB and Global Accelerator with NLB
 
-Strategy uses  Global accelerator,Route 53, ALB and NLB for high availability, geo-based routing, and failover across multiple AWS regions. Route 53 is configured with geolocation routing to direct users to the nearest region and failover routing to switch to a backup region during outages. Each region uses an Application Load Balancer (ALB) for frontend service load balancing and as an Ingress Controller for backend APIs via Kubernetes (e.g., EKS), supporting host-based routing. For the data layer,Global Accelerator with NLBs in multiple regions to provide static IPs, low-latency routing, and automatic failover based on health with  for Network Load Balancer (NLB)  that handles TCP traffic to high-performance services like RDS,Redis,Payemnt etc.This architecture ensures low latency, regional compliance, resilient failover, and secure separation between application and database layers.
+Strategy uses  Global accelerator,Route 53, ALB and NLB for high availability, geo-based routing, and failover across multiple AWS regions. Route 53 is configured with geolocation routing to direct users to the nearest region and failover routing to switch to a backup region during outages. Each region uses an Application Load Balancer (ALB) for frontend service load balancing and as an Ingress Controller for backend APIs via Kubernetes (e.g., EKS), supporting host-based routing. For the most critical services Global Accelerator handles the traffic to NLBs in multiple regions to provide static IPs, low-latency routing, and automatic failover based on health  for Network Load Balancer (NLB)  that handles TCP traffic to high-performance services like RDS,Redis,Payemnt etc.This architecture ensures low latency, regional compliance, resilient failover, and secure separation between application and database layers.
 
 Storage: for filesystem is used efs with replications in diffrent regions and datasync between backend services and for RDS and Redis is used block storage on provisioned iops.Storageclss is enabled on both for dyanmic provisioning,csi add-on plugins and pvcs.
 

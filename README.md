@@ -28,9 +28,9 @@ Enable route propagation in each TGW’s route table for peering attachments
 
 EKS_IRSA:Config for iam for service account with oidc token and necessary policies and permissions.
 
-Pan European Multi-Region Load Balancing with Route 53, ALB, and NLB
+Pan European Multi-Region Global Load Balancing using Route 53 with ALB and Global Accelerator with NLB
 
-Strategy uses  Route 53, ALB, and NLB for high availability, geo-based routing, and failover across multiple AWS regions. Route 53 is configured with geolocation routing to direct users to the nearest region and failover routing to switch to a backup region during outages. Each region uses an Application Load Balancer (ALB) for frontend service load balancing and as an Ingress Controller for backend APIs via Kubernetes (e.g., EKS), supporting host-based routing. For the data layer, a Network Load Balancer (NLB) handles TCP traffic to Amazon RDS and Amazon ElastiCache (Redis), ensuring high-throughput and zonal redundancy. This architecture ensures low latency, regional compliance, resilient failover, and secure separation between application and database layers.
+Strategy uses  Global accelerator,Route 53, ALB and NLB for high availability, geo-based routing, and failover across multiple AWS regions. Route 53 is configured with geolocation routing to direct users to the nearest region and failover routing to switch to a backup region during outages. Each region uses an Application Load Balancer (ALB) for frontend service load balancing and as an Ingress Controller for backend APIs via Kubernetes (e.g., EKS), supporting host-based routing. For the data layer,Global Accelerator with NLBs in multiple regions to provide static IPs, low-latency routing, and automatic failover based on health with  for Network Load Balancer (NLB)  that handles TCP traffic to high-performance services like RDS,Redis,Payemnt etc.This architecture ensures low latency, regional compliance, resilient failover, and secure separation between application and database layers.
 
 Storage: for filesystem is used efs with replications in diffrent regions and datasync between backend services and for RDS and Redis is used block storage on provisioned iops.Storageclss is enabled on both for dyanmic provisioning,csi add-on plugins and pvcs.
 

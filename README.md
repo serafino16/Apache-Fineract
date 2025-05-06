@@ -10,8 +10,6 @@ Kubernetes services : you can check the folder services ,every file have templat
 
 Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereignity)
 
-EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
-
 VPC:Shared VPC architecture where a central VPC is provisioned and shared across dev, stage, and prod environments. Each environment is isolated using dedicated subnets, route tables, and security groups to maintain security boundaries while optimizing resource utilization and network management.
 
 A total of 20 microservices are deployed across these environments using smaller, logically segmented subnets. These services leverage the shared networking infrastructure for consistent DNS resolution, IAM roles, and inter-service communication. Each service is deployed in its own namespace and/or subnet (based on network requirements) to ensure proper isolation and scalability.
@@ -25,6 +23,8 @@ Mesh Peering Topology: Each TGW will be peered with every other TGW for full reg
 Use TGW Peering Attachments for each region pair.
 
 Enable route propagation in each TGW’s route table for peering attachments
+
+EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
 
 EKS_IRSA:Config for iam for service account with oidc token and necessary policies and permissions.
 

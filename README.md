@@ -1,4 +1,4 @@
-no# Apache-Fineract
+ Apache-Fineract
 
 Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.PostgreSQL for RDS and Redis for cache.
 

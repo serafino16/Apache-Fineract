@@ -12,7 +12,9 @@ Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory 
 
 EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
 
-VPC:components for the network include public,private and database subnets,nat gateway,internet gateway,dns hostname,route table,availability zones,and vpc name.
+VPC:Shared VPC architecture where a central VPC is provisioned and shared across dev, stage, and prod environments. Each environment is isolated using dedicated subnets, route tables, and security groups to maintain security boundaries while optimizing resource utilization and network management.
+
+A total of 20 microservices are deployed across these environments using smaller, logically segmented subnets. These services leverage the shared networking infrastructure for consistent DNS resolution, IAM roles, and inter-service communication. Each service is deployed in its own namespace and/or subnet (based on network requirements) to ensure proper isolation and scalability.
 
 The networking  solution also integrates AWS Cloud WAN to enable centralized hybrid connectivity across multiple AWS regions and on-premises data centers. Calico CNI with VXLAN overlay networking is used within Kubernetes clusters for secure pod-to-pod communication. Cloud WAN segments and routing policies ensure seamless, secure traffic flow between environments
 

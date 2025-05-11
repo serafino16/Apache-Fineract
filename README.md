@@ -11,17 +11,10 @@ Kubernetes services : you can check the folder services ,every file have templat
 Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereignity)
 
 VPC:The VPC strategy involves using a Shared VPC for hosting common, cross-environment services such as authentication, logging, and notifications, which need to be accessible by all environments (dev, stage, prod). The environment-specific VPCs—dev VPC, stage VPC, and prod VPC—are dedicated to each respective environment to provide isolation.Components for the vpc include
-private subnets for backend services, public subnets for internet-facing services also database subnets. NAT Gateways,Internet gateway,Routing tables,DNS resolution,security groups.
+private subnets for backend services, public subnets for internet-facing services also database subnets. NAT Gateways,Internet gateway,Routing tables,DNS resolution,security groups.Calico CNI with VXLAN overlay networking is used within Kubernetes clusters for secure pod-to-pod communication.
 
-The networking  solution also integrates AWS Cloud WAN to enable centralized hybrid connectivity across multiple AWS regions and on-premises data centers. Calico CNI with VXLAN overlay networking is used within Kubernetes clusters for secure pod-to-pod communication. Cloud WAN segments and routing policies ensure seamless, secure traffic flow between environments
+The networking solution also integrates AWS Cloud WAN as the global backbone to interconnect regional AWS Transit Gateways (TGWs) in eu-west-1, eu-west-2, eu-west-3, and eu-central-1, enabling scalable, policy-based segmentation and low-latency multi-region communication across isolated network domains.  
 
-Transit Gateway strategy:Inter-Region Peering
-
-Mesh Peering Topology: Each TGW will be peered with every other TGW for full regional mesh.
-
-Use TGW Peering Attachments for each region pair.
-
-Enable route propagation in each TGW’s route table for peering attachments
 
 EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
 

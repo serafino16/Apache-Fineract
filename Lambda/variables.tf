@@ -13,3 +13,8 @@ output "event_source_mapping_uuid" {
   value       = aws_lambda_event_source_mapping.kafka_source.id
 }
 
+output "invoke_arn" {
+  description = "Invoke ARN for API Gateway or event sources"
+  value       = aws_lambda_function.this.invoke_arn
+}
+

@@ -38,11 +38,4 @@ resource "aws_ec2_transit_gateway_route_table_propagation" "this" {
   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.this[0].id
 }
 
-resource "aws_ec2_transit_gateway_peering_attachment" "this" {
-  for_each = var.peering_attachments
-  peer_account_id         = each.value.peer_account_id
-  peer_region             = each.value.peer_region
-  peer_transit_gateway_id = each.value.peer_tgw_id
-  transit_gateway_id      = aws_ec2_transit_gateway.this.id
-  tags                    = merge(var.tags, each.value.tags)
-}
+

@@ -5,8 +5,7 @@ Apache Fineract is an open-source platform for core banking and financial servic
 Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod maven:3.9.4-openjdk-17 AS prod-builder to openjdk:17-slim defined in multi stage build.For fronted image-node:18 with images for dev,stage and prod cleaned for unecessary dependencies.Standart images for PostgreSQL and Redis.
 
 
-Kubernetes services : you can check the folder services ,every file have templates for deployment,service and service account and load balancers and values for them. Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database and redis. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database contains headless service and also vertical load balancer,taint for the node group and toleration for the database and secrets
-for the database credentials.
+Kubernetes services :  Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database,redis,kafka etc. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database,redis and kafka contains headless service,for stateful pods is used vertical load balancer and for stateless pods is used horizontall load balancer ,taint and tolerations for rds,redis,kafka and secrets for the database credentials.
 
 Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereignity)
 

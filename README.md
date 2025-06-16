@@ -7,6 +7,9 @@ Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod mav
 
 Kubernetes services :  Deployment file consist of replicas,image from ecr,service account name,resource request and limit,livness and readiness probe volume mount for efs for backend services and ebs for database,redis,kafka etc. Service account is connected to eks-irsa. Service contains load balancers with annotations for ALB,Ingress and NLB. Database,redis and kafka contains headless service,for stateful pods is used vertical load balancer and for stateless pods is used horizontall load balancer ,taint and tolerations for rds,redis,kafka and secrets for the database credentials.
 
+Jenkins pipeline builds, pushes, and deploys multiple Apache Fineract  microservices to AWS ECR and EKS. You select the environment (dev, stage, prod) and AWS region (eu-west-1, eu-west-2, eu-west-3, eu-central-1). It builds Docker images for all services, pushes them to ECR, and deploys using Helm to the specified EKS cluster and namespace, automating multi-region, multi-environment releases.
+
+
 Regions:eu-west-1(main region),eu west 2,3 and eu-central 1(used for regolatory complience based on DE,FR and GBR local laws for data sovereignity)
 
 VPC:The VPC strategy involves using a Shared VPC for hosting common, cross-environment services such as authentication, logging, and notifications, which need to be accessible by all environments (dev, stage, prod). The environment-specific VPCs—dev VPC, stage VPC, and prod VPC—are dedicated to each respective environment to provide isolation.Components for the vpc include

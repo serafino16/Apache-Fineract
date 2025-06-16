@@ -29,6 +29,7 @@ The messaging broker strategy utilize Amazon MSK (Managed Streaming for Apache K
 To enable event-driven workflows, AWS Lambda functions are directly integrated with MSK and act as consumers for Kafka topics. Lambda automatically scales and processes messages as they arrive, eliminating the need to manage consumer groups manually. This setup ensures decoupled, resilient, and reactive processing for business-critical events with minimal operational overhead.
 
 Geo-Partitioned Disaster Recovery Strategy
+
 The disaster recovery strategy for Amazon RDS with Aurora global database and Redis ensures high availability and fault tolerance across multiple AWS regions. The primary region is eu-west-1 (Ireland), with disaster recovery extending to eu-west-2 (London), eu-west-3 (Paris), and eu-central-1 (Frankfurt). RDS utilizes cross-region read replicas for asynchronous data replication from the primary region to secondary regions. In the event of primary region failure, a read replica can be promoted to a standalone instance with DNS updates or manual promotion.Redis uses Global Datastore for Redis for asynchronous replication between the primary and secondary regions, allowing for failover by DNS redirection or application reconfiguration.  All data is encrypted in transit and at rest, and backup snapshots are stored in cross-region S3 buckets.
 
 Network Firewall Manager:Network Firewall with configurable policies, logging, encryption, and delete protection. It aims to secure VPC traffic, support customizable rule groups

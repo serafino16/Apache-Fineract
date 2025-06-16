@@ -1,66 +1,76 @@
 pipeline {
     agent any
 
-    environment {
-        
-        AWS_REGION = 'eu-west-3'
-        ECR_REPO_NAME = 'my_ecr'
-        EKS_CLUSTER_NAME = 'eks-devstage'
-        EKS_NAMESPACE = 'apache-fineract'
-        IMAGE_TAG = "${GIT_COMMIT}"
-        ECR_URL = "123456789012.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        CONTAINER_ENV = 'dev/stage'  
+    parameters {
+        choice(name: 'CONTAINER_ENV', choices: ['dev', 'stage', 'prod'], description: 'Choose the environment')
     }
 
-    parameters {
-        choice(name: 'CONTAINER_ENV', choices: ['dev/stage', 'prod'], description: 'Choose the container environment')
+    environment {
+        IMAGE_TAG = "${GIT_COMMIT}"
+        AWS_ACCOUNT_ID = "123456789012"
+        EKS_NAMESPACE = "apache-fineract"
+        HELM_RELEASE_NAME = "fineract-release"
     }
 
     stages {
-        stage('Git Checkout') {
+        stage('Checkout Code') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Set Dynamic Environment Vars') {
+            steps {
+                script {
+                    if (params.CONTAINER_ENV == 'dev') {
+                        env.AWS_REGION = 'eu-west-1'
+                        env.ECR_REPO_NAME = 'fineract-dev'
+                        env.EKS_CLUSTER_NAME = 'eks-dev'
+                    } else if (params.CONTAINER_ENV == 'stage') {
+                        env.AWS_REGION = 'eu-west-2'
+                        env.ECR_REPO_NAME = 'fineract-stage'
+                        env.EKS_CLUSTER_NAME = 'eks-stage'
+                    } else if (params.CONTAINER_ENV == 'prod') {
+                        env.AWS_REGION = 'eu-central-1'
+                        env.ECR_REPO_NAME = 'fineract-prod'
+                        env.EKS_CLUSTER_NAME = 'eks-prod'
+                    }
+
+                    env.ECR_URL = "${env.AWS_ACCOUNT_ID}.dkr.ecr.${env.AWS_REGION}.amazonaws.com"
+                    env.FULL_IMAGE = "${env.ECR_URL}/${env.ECR_REPO_NAME}:${env.IMAGE_TAG}"
+                }
             }
         }
 
         stage('Docker Build') {
             steps {
                 script {
-                    
-                    if (params.CONTAINER_ENV == 'devstage') {
-                        ECR_REPO_NAME = 'fineract-business-dev'  
-                        AWS_REGION = 'us-west-3'
-                    } else if (params.CONTAINER_ENV == 'prod') {
-                        ECR_REPO_NAME = 'fineract-business-prod'  
-                        AWS_REGION = 'eu-west-1'
-                    }
-
-                    ECR_URL = "123456789012.dkr.ecr.${AWS_REGION}.amazonaws.com"
-                    sh "docker build -t ${ECR_URL}/${ECR_REPO_NAME}:${IMAGE_TAG} ."
+                    sh "docker build -t ${FULL_IMAGE} ."
                 }
             }
         }
 
-        stage('Docker Push to ECR') {
+        stage('Push Image to ECR') {
             steps {
                 script {
-                    
                     sh """
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URL}
-                        docker push ${ECR_URL}/${ECR_REPO_NAME}:${IMAGE_TAG}
+                        docker push ${FULL_IMAGE}
                     """
                 }
             }
         }
 
-        stage('Deploy to EKS') {
+        stage('Deploy to EKS using Helm') {
             steps {
                 script {
-                    
                     sh """
                         aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
-                        kubectl set image deployment/spree-admin spree-admin=${ECR_URL}/${ECR_REPO_NAME}:${IMAGE_TAG} --namespace=${EKS_NAMESPACE}
-                        kubectl rollout status deployment/spree-admin --namespace=${EKS_NAMESPACE}
+                        helm upgrade --install ${HELM_RELEASE_NAME} ./helm/fineract-chart \\
+                          --namespace ${EKS_NAMESPACE} \\
+                          --create-namespace \\
+                          --set image.repository=${ECR_URL}/${ECR_REPO_NAME} \\
+                          --set image.tag=${IMAGE_TAG}
                     """
                 }
             }
@@ -69,11 +79,10 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline succeeded!'
+            echo " Deployment to ${params.CONTAINER_ENV} (${AWS_REGION}) succeeded!"
         }
-
         failure {
-            echo 'Pipeline failed!'
+            echo " Deployment failed for ${params.CONTAINER_ENV} (${AWS_REGION})"
         }
     }
 }

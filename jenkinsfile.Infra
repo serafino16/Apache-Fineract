@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'stage', 'prod'], description: 'Select environment')
+    }
+
+    environment {
+        BASE_DIR = "terraform/live/${params.ENVIRONMENT}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/serafino16/Apache-Fineract.git', branch: 'main'
+            }
+        }
+
+        stage('Discover Regions') {
+            steps {
+                script {
+                    env.REGIONS = sh(
+                        script: "find ${BASE_DIR} -mindepth 1 -maxdepth 1 -type d -exec basename {} \\;",
+                        returnStdout: true
+                    ).trim().split("\n")
+                    echo "Discovered Regions: ${env.REGIONS}"
+                }
+            }
+        }
+
+        stage('Run Terragrunt per Region') {
+            steps {
+                script {
+                    env.REGIONS.each { region ->
+                        dir("${BASE_DIR}/${region}") {
+                            echo " Running Terragrunt in: ${region}"
+                            sh 'terragrunt run-all init'
+                            sh 'terragrunt run-all plan -out planfile'
+                            input message: "Apply Terragrunt in ${region}?"
+                            sh 'terragrunt run-all apply -auto-approve'
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo " All regions applied successfully!"
+        }
+        failure {
+            echo " One or more regions failed."
+        }
+    }
+}
+

@@ -41,7 +41,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/serafino16/Apache-Fineract.git'
             }
         }
 

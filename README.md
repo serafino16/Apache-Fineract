@@ -1,6 +1,6 @@
  Apache-Fineract
 
-Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.MySQL for RDS and Redis for cache.The architectural patterns for Pan-European financial app include a multi-region, GDPR-compliant cloud setup with low-latency, high availability, data residency,  and disaster recovery, ensuring compliance and resilience across Europe.
+Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.MySQL for Aurora database and Redis for cache.The architectural patterns for Pan-European financial app include a multi-region, GDPR-compliant cloud setup with low-latency, high availability, data residency,  and disaster recovery, ensuring compliance and resilience across Europe.
 
 Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod maven:3.9.4-openjdk-17 AS prod-builder to openjdk:17-slim defined in multi stage build.For fronted image-node:18 with images for dev,stage and prod cleaned for unecessary dependencies.Standart images for PostgreSQL and Redis.
 
@@ -17,6 +17,9 @@ private subnets for backend services, public subnets for internet-facing service
 
 The networking solution also integrates AWS Cloud WAN as the global backbone to interconnect regional AWS Transit Gateways (TGWs) in eu-west-1, eu-west-2, eu-west-3, and eu-central-1, enabling scalable, policy-based segmentation and low-latency multi-region communication across isolated network domains.  
 
+Architectural strategy for hybrid cloud connection:
+
+AWS Direct Connect as the primary dedicated link between the on-premises data center and AWS to ensure low-latency, high-throughput, and stable connectivity, while configuring an AWS Site-to-Site VPN over the internet as a secure backup path using IPSec encryption, with both connections terminating at a TGW where BGP routing is implemented to prioritize Direct Connect through lower route cost and automatically fail over to the VPN in the event of a Direct Connect failure.
 
 EKS: Diffrent clusters for every nviroment and regions(9).In the cluster are used public and private node groups,cluster autoscaler.
 
@@ -34,5 +37,6 @@ To enable event-driven workflows, AWS Lambda functions are directly integrated w
 Geo-Partitioned Disaster Recovery Strategy
 
 The disaster recovery strategy for  Aurora global database and Redis global Datastore ensures high availability and fault tolerance across multiple AWS regions. The primary region is eu-west-1 (Ireland), with disaster recovery extending to eu-west-2 (London), eu-west-3 (Paris), and eu-central-1 (Frankfurt). RDS utilizes cross-region read replicas for asynchronous data replication from the primary region to secondary regions. In the event of primary region failure, a read replica can be promoted to a standalone instance with DNS updates or manual promotion.Redis uses Global Datastore for Redis for asynchronous replication between the primary and secondary regions, allowing for failover by DNS redirection or application reconfiguration.  All data is encrypted in transit and at rest, and backup snapshots are stored in cross-region S3 buckets.
+
 
 Network Firewall Manager:Network Firewall with configurable policies, logging, encryption, and delete protection. It aims to secure VPC traffic, support customizable rule groups

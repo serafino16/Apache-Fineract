@@ -1,6 +1,6 @@
  Apache-Fineract
 
-Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.MySQL for Aurora database and Redis for cache.The architectural patterns for Pan-European financial app include a multi-region, GDPR-compliant cloud setup with low-latency, high availability,zero data loss, data residency,  and disaster recovery, ensuring compliance and resilience across Europe.
+Apache Fineract is an open-source platform for core banking and financial services. Application consist of 20 microservices.The languages for the application are java 17 for backend and HTML/CSS/JavaScript for frontend.For build process is used maven:3.9.4.MySQL for Aurora database and Redis for cache.The architectural patterns for Pan-European financial app include a multi-region, GDPR-compliant cloud setup with data residency, low-latency, high availability,zero data loss and disaster recovery, ensuring compliance and resilience across Europe.
 
 Docker: backend image-for dev maven:3.9.4-openjdk-17 AS dev-builder for prod maven:3.9.4-openjdk-17 AS prod-builder to openjdk:17-slim defined in multi stage build.For fronted image-node:18 with images for dev,stage and prod cleaned for unecessary dependencies.Standart images for MySQL and Redis.
 

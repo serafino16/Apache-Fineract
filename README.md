@@ -31,8 +31,9 @@ Strategy uses  Global accelerator,Route 53, ALB and NLB for high availability, g
 
 Storage: for filesystem is used efs with asynchronus replications in diffrent regions  between backend services. For Aurora database and Kafka is used block storage on provisioned iops.Storageclss is enabled on both for dyanmic provisioning,csi add-on plugins and pvcs.
 
-The messaging broker strategy utilize Amazon MSK (Managed Streaming for Apache Kafka) to enable low-latency, high-throughput communication between critical services. MSK acts as a durable, scalable, and managed Kafka cluster for streaming real-time events across microservices. These services (Transaction,Payment,Loan Managment) produce messages to specific Kafka topics for downstream processing.
-To enable event-driven workflows, AWS Lambda functions are directly integrated with MSK and act as consumers for Kafka topics. Lambda automatically scales and processes messages as they arrive, eliminating the need to manage consumer groups manually. This setup ensures decoupled, resilient, and reactive processing for business-critical events with minimal operational overhead.
+MSK Kafka Multi-Region Active-Active with Partitioning by Region
+
+The messaging broker strategy utilize Amazon MSK (Managed Streaming for Apache Kafka) to enable low-latency, high-throughput communication between critical services. In this architecture, each AWS region hosts its own MSK cluster (multi-AZ) and handles local writes. Data is partitioned by region at the application level, meaning each region writes to its own region-specific topics.Cross-region replication is handled asynchronously via MirrorMaker 2.To enable event-driven workflows, AWS Lambda functions are directly integrated with MSK and act as consumers for Kafka topics. Lambda automatically scales and processes messages as they arrive, eliminating the need to manage consumer groups manually. This setup ensures decoupled, resilient, and reactive processing for business-critical events with minimal operational overhead.
 
 Geo-Partitioned Disaster Recovery Strategy
 
